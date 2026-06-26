@@ -3,10 +3,10 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-    themes: light --default;
+    themes: garden --default;
 }
 @plugin "daisyui/theme" {
-    name: "light";
+    name: "garden";
     default: true;
     --color-primary: #CAEB66;
     --color-secondary: #03373D;
