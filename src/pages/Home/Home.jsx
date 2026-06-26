@@ -1,6 +1,7 @@
 // import React from 'react';
 
 import Banner from "./Banner/Banner";
+import Services from "./Services/Services";
 import Works from "./Works/Works";
 
 const Home = () => {
@@ -11,6 +12,9 @@ const Home = () => {
             </div>
             <div className="mt-8 mx-auto">
                 <Works></Works>
+            </div>
+            <div className="mt-8 mx-auto">
+                <Services></Services>
             </div>
         </div>
     );
