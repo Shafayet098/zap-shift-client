@@ -4,10 +4,12 @@ import Banner from "./Banner/Banner";
 import Brands from "./Brands/Brands";
 import Marcent from "./Marcent/Marcent";
 import Parcel from "./Parcel/Parcel";
+import Review from "./Review/Review";
 // import Brands from "./Brands/Brands";
 import Services from "./Services/Services";
 import Works from "./Works/Works";
 
+const reviewsPromise = fetch('reviews.json').then(res=>res.json());
 const Home = () => {
     return (
         <div>
@@ -29,6 +31,9 @@ const Home = () => {
             </div>
             <div className="mt-32 mx-auto">
                 <Marcent></Marcent>
+            </div>
+            <div className="mt-32 mx-auto">
+                <Review reviewsPromise={reviewsPromise}></Review>
             </div>
         </div>
     );
