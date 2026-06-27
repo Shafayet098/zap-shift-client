@@ -2,6 +2,7 @@
 
 import Banner from "./Banner/Banner";
 import Brands from "./Brands/Brands";
+import FAQ from "./FAQ/FAQ";
 import Marcent from "./Marcent/Marcent";
 import Parcel from "./Parcel/Parcel";
 import Review from "./Review/Review";
@@ -34,6 +35,9 @@ const Home = () => {
             </div>
             <div className="mt-32 mx-auto">
                 <Review reviewsPromise={reviewsPromise}></Review>
+            </div>
+            <div className="mt-32 mx-auto">
+                <FAQ></FAQ>
             </div>
         </div>
     );

@@ -5,14 +5,14 @@ import NavBar from '../pages/Shared/NavBar/NavBar';
 
 const RootLayout = () => {
     return (
-        <div className='max-w-7xl mx-auto'>
-            <nav>
+        <div >
+            <nav className='max-w-7xl mx-auto'>
                 <NavBar></NavBar>
             </nav>
-            <main>
+            <main className='max-w-7xl mx-auto'>
                 <Outlet></Outlet>
             </main>
-            <footer>
+            <footer className='bg-black mt-18'>
                 <Footer></Footer>
             </footer>
         </div>
