@@ -8,7 +8,7 @@ import { useRef } from "react";
 const Coverage = () => {
     const position = [23.6850, 90.3563];
     const serviceCenters = useLoaderData();
-    const mapRef = useRef();
+    const mapRef = useRef(null);
     console.log(serviceCenters)
     const handleSearch=e=>{
         e.preventDefault();

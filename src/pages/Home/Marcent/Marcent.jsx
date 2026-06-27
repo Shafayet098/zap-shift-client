@@ -1,8 +1,9 @@
 // import React from 'react';
 import location from '../../../assets/location-merchant.png'
+import merchant from '../../../assets/be-a-merchant-bg.png'
 const Marcent = () => {
     return (
-        <div className="hero bg-secondary  max-w-6xl mx-auto rounded-2xl p-8">
+        <div className="relative hero bg-secondary  max-w-6xl mx-auto rounded-2xl p-8">
             <div className="hero-content flex-col lg:flex-row-reverse">
                 <img
                     src={location}
@@ -22,6 +23,9 @@ const Marcent = () => {
                         </button>
                     </div>
                 </div>
+            </div>
+            <div className='absolute top-0 translate -translate-y-8'>
+                <img src={merchant} alt="" />
             </div>
         </div>
     );
