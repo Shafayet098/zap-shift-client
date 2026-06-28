@@ -2,15 +2,21 @@
 
 import { useForm } from "react-hook-form";
 import useAuth from "../../Hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 const Login = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const { signInUser,signInGoogle } = useAuth();
+    const { register,getValues, handleSubmit, formState: { errors } } = useForm();
+
+    const { signInUser,signInGoogle,forgetPassword } = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
+    console.log('location',location)
+
     const handleLogin = (data) => {
         signInUser(data.email, data.password)
             .then(res => {
                 console.log(res)
+                navigate(location?.state||'/')
             }).catch(err => {
                 console.log(err)
             })
@@ -18,6 +24,17 @@ const Login = () => {
     const loginWithGoogle=()=>{
         signInGoogle().then(res=>{
             console.log(res)
+            navigate(location.state||'/')
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
+    
+    const handleForgetPassword=()=>{
+        const email = getValues("email");
+        console.log(email)
+        forgetPassword(email).then(()=>{
+            alert("Mail is send")
         }).catch(err=>{
             console.log(err)
         })
@@ -31,7 +48,7 @@ const Login = () => {
                 <p className="text-sm py-2">LogIn With ZapShift</p>
                 <fieldset className="fieldset">
                     <label className="label text-sm">Email</label>
-                    <input type="email" className="input w-full bg-white" placeholder="Email" {...register("email", { required: true })} />
+                    <input type="email" name='email' className="input w-full bg-white" placeholder="Email" {...register("email", { required: true })} />
 
                     {errors.email?.type === "required" && (
                         <p className="text-red-500">Email is required</p>
@@ -47,10 +64,12 @@ const Login = () => {
                         <p className="text-red-500">Password must be 8 char long and composed of at least one capital letter, one small letter, one digit and one special character</p>
                     )}
 
-                    <div><a className="link link-hover">Forgot password?</a></div>
+                    <div><button onClick={handleForgetPassword} className="link link-hover">Forgot password?</button></div>
                     <button className="btn bg-primary mt-4 ">Login</button>
                 </fieldset>
-                <p>Don't have any Account? <Link to={'/auth/register'} className="font-bold text-primary">Register</Link></p>
+                <p>Don't have any Account? <Link
+                state={location.state}
+                to={'/auth/register'} className="font-bold text-primary">Register</Link></p>
                 <p className="text-center ">Or</p>
                 {/* Google */}
                 <button onClick={loginWithGoogle} className="btn bg-white text-black hover:bg-slate-200 border-[#e5e5e5]">

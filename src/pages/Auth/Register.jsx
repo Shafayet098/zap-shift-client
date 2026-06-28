@@ -1,14 +1,19 @@
 // import React from 'react';
 import { useForm } from "react-hook-form"
 import useAuth from "../../Hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import axios from "axios";
 
 const Register = () => {
-    const { registerUser, signInGoogle,updataUser } = useAuth()
+    const { registerUser, signInGoogle,updataUser,forgetPassword } = useAuth()
+    const location = useLocation();
+    console.log("Register Location:",location)
+    const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
+        getValues,
         formState: { errors },
     } = useForm()
     const onSubmit = (data) => {
@@ -32,6 +37,7 @@ const Register = () => {
                     }
                     updataUser(userProfile).then(()=>{
                         console.log('profile is updated',)
+                        navigate(location.state)
                     }).catch(err=>{
                         console.log(err)
                     })
@@ -44,6 +50,15 @@ const Register = () => {
         signInGoogle().then(res => {
             console.log(res)
         }).catch(err => {
+            console.log(err)
+        })
+    }
+    const handleForgetPassword=()=>{
+        const email = getValues("email");
+        console.log(email)
+        forgetPassword(email).then(()=>{
+            alert("Mail is send")
+        }).catch(err=>{
             console.log(err)
         })
     }
@@ -72,10 +87,12 @@ const Register = () => {
                         Password Must be 6 characters or longer</p>}
                     {errors.password?.type === 'pattern' && <span className="text-red-500">Password must have at least one capital letter, one small letter, one special character and one digit</span>}
 
-                    <div><a className="link link-hover">Forgot password?</a></div>
+                    <div><button onClick={handleForgetPassword} className="link link-hover">Forgot password?</button></div>
                     <button className="btn bg-primary mt-4">Register</button>
                 </fieldset>
-                <p className="text-sm pt-2">Already Have an Account <Link to={'/auth'} className="font-bold text-primary">Login</Link></p>
+                <p className="text-sm pt-2">Already Have an Account <Link
+                state={location.state}
+                to={'/auth'} className="font-bold text-primary">Login</Link></p>
                 <p className="text-center py-2">Or</p>
                 {/* Google */}
                 <button onClick={loginWithGoogle} className="btn bg-white text-black hover:bg-slate-200 border-[#e5e5e5]">

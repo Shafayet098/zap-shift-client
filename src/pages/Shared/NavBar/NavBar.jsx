@@ -16,7 +16,7 @@ const NavBar = () => {
     const links = <>
         <li><NavLink>Services</NavLink></li>
         <li><NavLink to={'/about'}>About Us</NavLink></li>
-        <li><NavLink to="/coverage">Coverage</NavLink></li>
+        <li><NavLink to={"/coverage"}>Coverage</NavLink></li>
     </>
     return (
         <div className="navbar bg-white rounded-xl shadow-sm flex items-center justify-between">
@@ -51,9 +51,9 @@ const NavBar = () => {
                         </Link>
                 }
                 <div className="flex">
-                    <button className="font-bold py-2 text-lg text-center text-secondary transition-colors duration-300 bg-primary rounded-xl ease px-4 hover:bg-secondary hover:text-primary hover:cursor-pointer">
+                    <Link to={'/rider'} className="font-bold py-2 text-lg text-center text-secondary transition-colors duration-300 bg-primary rounded-xl ease px-4 hover:bg-secondary hover:text-primary hover:cursor-pointer">
                         Be A Rider
-                    </button>
+                    </Link>
                     <button className=" font-bold px-3 text-xl text-center text-primary transition-colors duration-300 bg-secondary rounded-full ease  hover:cursor-pointer ">
                         <MdArrowOutward size={20} className="font-bold " />
                     </button>
