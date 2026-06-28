@@ -2,18 +2,42 @@
 import { useForm } from "react-hook-form"
 import useAuth from "../../Hooks/useAuth";
 import { Link } from "react-router";
+import axios from "axios";
 
 const Register = () => {
-    const { registerUser, signInGoogle } = useAuth()
+    const { registerUser, signInGoogle,updataUser } = useAuth()
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm()
     const onSubmit = (data) => {
+        console.log("after registration",data.photo[0]);
+        const profileImg = data.photo[0];
         registerUser(data.email, data.password)
             .then(result => {
                 console.log(result)
+                //store the image and get the photo url from imgbb
+                const formData = new FormData();
+                formData.append('image',profileImg)
+                const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imgProfile_key}`
+
+                axios.post(image_API_URL, formData)
+                .then(res=>{
+                    console.log('After image upload:',res.data.data.url)
+                     //updata user profile
+                    const userProfile={
+                        displayName: data.name,
+                        photoURL : res.data.data.url
+                    }
+                    updataUser(userProfile).then(()=>{
+                        console.log('profile is updated',)
+                    }).catch(err=>{
+                        console.log(err)
+                    })
+
+                })
+
             }).catch(err => console.log(err))
     }
     const loginWithGoogle = () => {
@@ -25,11 +49,18 @@ const Register = () => {
     }
 
     return (
-        <div className="card mt-32  w-full  max-w-sm shrink-0 ">
+        <div className="card mt-24  w-full  max-w-sm shrink-0 ">
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
                 <h1 className="text-4xl font-bold">Create An Account</h1>
                 <p className="text-sm py-2">Register With ZapShift</p>
                 <fieldset className="fieldset">
+                    <label className="label text-sm">Name</label>
+                    <input type="text" className="input w-full bg-white" placeholder="Name" {...register('name', { required: true })} />
+
+                    
+                    <label className="label text-sm">Photo</label>
+                    <input type="file" className="file-input w-full bg-white" placeholder="Photo" {...register('photo', { required: true })} />
+
                     <label className="label text-sm">Email</label>
                     <input type="email" className="input w-full bg-white" placeholder="Email" {...register('email', { required: true })} />
                     {errors.email && <span className="text-red-500">This field is required</span>}

@@ -1,16 +1,25 @@
 // import React from 'react';
 
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import Logo from "../../../Components/Logo/Logo";
+import { MdArrowOutward } from "react-icons/md";
+import useAuth from "../../../Hooks/useAuth";
+
 
 const NavBar = () => {
+    const { user,signOutUser } = useAuth();
+    const handleLogOut=()=>{
+        signOutUser().then().catch(err=>{
+            console.log(err)
+        })
+    }
     const links = <>
         <li><NavLink>Services</NavLink></li>
         <li><NavLink to={'/about'}>About Us</NavLink></li>
         <li><NavLink to="/coverage">Coverage</NavLink></li>
     </>
     return (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar bg-white rounded-xl shadow-sm flex items-center justify-between">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -31,8 +40,26 @@ const NavBar = () => {
                     {links}
                 </ul>
             </div>
-            <div className="navbar-end">
-                <a className="btn">Button</a>
+            <div className="flex gap-4 items-center">
+                {
+                    user ? <button onClick={handleLogOut} className="py-2 text-lg text-secondary  px-4 hover:bg-secondary  bg-white border-2 border-slate-100 flex items-center hover:text-primary transition-colors duration-300 cursor-pointer rounded-xl font-bold">
+                        LogOut
+                    </button>
+                        :
+                        <Link to="/auth" className="py-2 text-lg text-secondary  px-4 hover:bg-secondary  bg-white border-2 border-slate-100 flex items-center hover:text-primary transition-colors duration-300 cursor-pointer rounded-xl font-bold">
+                            Login
+                        </Link>
+                }
+                <div className="flex">
+                    <button className="font-bold py-2 text-lg text-center text-secondary transition-colors duration-300 bg-primary rounded-xl ease px-4 hover:bg-secondary hover:text-primary hover:cursor-pointer">
+                        Be A Rider
+                    </button>
+                    <button className=" font-bold px-3 text-xl text-center text-primary transition-colors duration-300 bg-secondary rounded-full ease  hover:cursor-pointer ">
+                        <MdArrowOutward size={20} className="font-bold " />
+                    </button>
+                </div>
+
+
             </div>
         </div>
     );
