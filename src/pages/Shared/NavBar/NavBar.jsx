@@ -17,6 +17,7 @@ const NavBar = () => {
         <li><NavLink>Services</NavLink></li>
         <li><NavLink to={'/about'}>About Us</NavLink></li>
         <li><NavLink to={"/coverage"}>Coverage</NavLink></li>
+        <li><NavLink to={"/send-parcel"}>SendParcel</NavLink></li>
     </>
     return (
         <div className="navbar bg-white rounded-xl shadow-sm flex items-center justify-between">
