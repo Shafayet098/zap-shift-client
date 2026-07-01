@@ -10,6 +10,13 @@ import Register from "../pages/Auth/Register";
 import PrivateRoute from "./PrivateRoute";
 import Rider from "../pages/Rider/Rider";
 import SendParcel from "../pages/SendParcel/SendParcel";
+import DashBoardLayout from "../Layouts/DashBoardLayout";
+import MyParcels from "../pages/DashBoard/MyParcels/MyParcels";
+import Payment from "../pages/DashBoard/Payment/Payment";
+import PaymentSuccess from "../pages/DashBoard/Payment/PaymentSuccess";
+import PaymentCancelled from "../pages/DashBoard/Payment/PaymentCancelled";
+import PaymentHistory from "../pages/DashBoard/PaymentHistory/PaymentHistory";
+import ApproveRiders from "../pages/DashBoard/ApproveRiders/ApproveRiders";
 
 
 
@@ -26,7 +33,8 @@ export const router = createBrowserRouter([
                 path:'rider',
                 element:<PrivateRoute>
                     <Rider></Rider>
-                </PrivateRoute>
+                </PrivateRoute>,
+                loader:()=>fetch('/serviceCenters.json').then(res=>res.json())
             },
             {
                 path:'send-parcel',
@@ -57,6 +65,38 @@ export const router = createBrowserRouter([
             {
                 path: 'register',
                 Component:Register
+            }
+        ]
+    },
+    {
+        path:'dashboard',
+        element:<PrivateRoute>
+            <DashBoardLayout></DashBoardLayout>
+        </PrivateRoute>,
+        children:[
+            {
+                index:true,
+                Component:MyParcels
+            },
+            {
+                path:'payment/:parcel_id',
+                Component:Payment
+            },
+            {
+                path:'payment-success',
+                Component: PaymentSuccess
+            },
+            {
+                path:'payment-cancelled',
+                Component: PaymentCancelled
+            },
+            {
+                path:'payment-history',
+                Component:PaymentHistory
+            },
+            {
+                path:'approve-riders',
+                Component:ApproveRiders
             }
         ]
     }

@@ -1,14 +1,19 @@
 // import React from 'react';
 
 import { useForm } from "react-hook-form";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import useAuth from "../../Hooks/useAuth";
 
 const SendParcel = () => {
+    const axiosSecure = useAxiosSecure();
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        // formState: { errors },
         watch,
     } = useForm()
 
@@ -34,7 +39,7 @@ const SendParcel = () => {
         const inCity = data.sender_district === data.receiver_district ? true : false;
         const weight = parseFloat(data.parcel_weight)
         let cost;
-        
+
         if (isdocument) {
             cost = inCity ? 60 : 80;
             console.log(cost)
@@ -43,15 +48,17 @@ const SendParcel = () => {
             if (weight <= 3) {
                 cost = inCity ? 110 : 150;
                 console.log(cost)
-                
+
             }
             else {
                 let extra = weight - 3;
                 cost = inCity ? 110 + 40 * extra : 150 + 40 * extra + 40;
                 console.log(cost)
-                
+
             }
         }
+        data.cost = cost;
+        data.payment_status = "blue";
         Swal.fire({
             title: "Are you sure?",
             text: `You Will be charged ${cost} taka!`,
@@ -61,11 +68,23 @@ const SendParcel = () => {
             cancelButtonColor: "#d33",
             confirmButtonText: "Are you agree"
         }).then((result) => {
-            if (result.isConfirmed) Swal.fire({
-                // title: "Deleted!",
-                // text: "Your file has been deleted.",
-                // icon: "success"
-            });
+            if (result.isConfirmed)
+                //save the parcel into to the database
+                axiosSecure.post('/parcels', data)
+                    .then(res => {
+                        console.log("after saving parcel: ", res.data)
+                        if (res.data.insertedId) {
+                            navigate('/dashboard')
+                            Swal.fire({
+                            position:"top-end",
+                            title: "Parcel has created. Please Pay",
+                            showConfirmButton:false,
+                            icon: "success",
+                            timer:2500
+                            });
+                        }
+                    })
+
         });
     }
 
@@ -98,13 +117,25 @@ const SendParcel = () => {
                 <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <fieldset className="fieldset">
                         <h3 className="text-lg font-semibold">Sender Details</h3>
+                        {/* Sender Name */}
                         <label className="label pt-2">Sender Name</label>
-                        <input type="text" className="input w-full bg-white" placeholder="Name"{...register('sender_name')} />
+                        <input type="text" className="input w-full bg-white" placeholder="Name"
+                            defaultValue={user?.displayName}
+                            {...register('sender_name')} />
 
                         <label className="label pt-2">Address</label>
                         <input type="text" className="input w-full bg-white" placeholder="Address"{...register('sender_address')} />
                         <label className="label pt-2">Sender Phone Number</label>
+
+                        {/* Sender Phone Number */}
                         <input type="number" className="input w-full bg-white" placeholder="Phone Number"{...register('sender_phone_number')} />
+
+                        {/* Sender Email */}
+                        <label className="label pt-2">Sender Email </label>
+                        <input type="email" className="input w-full bg-white" placeholder="Sender Email"
+                            defaultValue={user?.email}
+                            {...register('sender_email')} />
+
                         {/* Sender Region */}
                         <fieldset className="fieldset">
                             <label className="label pt-2">Your Region</label>
@@ -140,7 +171,9 @@ const SendParcel = () => {
                         <input type="text" className="input w-full bg-white" placeholder="Address"{...register('receiver_address')} />
                         <label className="label pt-2">Receiver Phone Number</label>
                         <input type="number" className="input w-full bg-white" placeholder="Phone Number"{...register('receiver_phone_number')} />
-
+                        {/* Receiver Email */}
+                        <label className="label pt-2">Receiver Email </label>
+                        <input type="email" className="input w-full bg-white" placeholder="Receiver Email"{...register('receiver_email')} />
                         {/* Receiver Region */}
                         <fieldset className="fieldset">
                             <label className="label pt-2">Receiver Region</label>

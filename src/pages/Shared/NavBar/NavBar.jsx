@@ -18,6 +18,9 @@ const NavBar = () => {
         <li><NavLink to={'/about'}>About Us</NavLink></li>
         <li><NavLink to={"/coverage"}>Coverage</NavLink></li>
         <li><NavLink to={"/send-parcel"}>SendParcel</NavLink></li>
+        {
+        user && <li><NavLink to={"/dashboard"}>My Parcels</NavLink></li>
+        }
     </>
     return (
         <div className="navbar bg-white rounded-xl shadow-sm flex items-center justify-between">
@@ -32,9 +35,9 @@ const NavBar = () => {
                         {links}
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-xl">
+                <span className="btn btn-ghost text-xl">
                     <Logo></Logo>
-                </a>
+                </span>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">

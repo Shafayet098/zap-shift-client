@@ -3,13 +3,14 @@ import { useForm } from "react-hook-form"
 import useAuth from "../../Hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import axios from "axios";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const Register = () => {
     const { registerUser, signInGoogle,updataUser,forgetPassword } = useAuth()
     const location = useLocation();
     console.log("Register Location:",location)
     const navigate = useNavigate();
-
+    const axiosSecure = useAxiosSecure();
     const {
         register,
         handleSubmit,
@@ -30,6 +31,18 @@ const Register = () => {
                 axios.post(image_API_URL, formData)
                 .then(res=>{
                     console.log('After image upload:',res.data.data.url)
+                    //create user in the database
+                    const userInfo = {
+                        email: data.email,
+                        displayName: data.name,
+                        photoURL: res.data.data.url
+                    }
+                    axiosSecure.post('/users',userInfo)
+                    .then(res=>{
+                        if(res.data.insertedId){
+                            console.log("user created in the database")
+                        }
+                    })
                      //updata user profile
                     const userProfile={
                         displayName: data.name,
